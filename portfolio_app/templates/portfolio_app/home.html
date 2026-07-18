@@ -1,0 +1,123 @@
+{% extends 'portfolio_App/base.html' %}
+{% load static %}
+
+{% block title %}Home | My Portfolio{% endblock %}
+
+{% block content %}
+
+<div class="hero-section" id="home">
+    <h1>Hi, I'm Hemal Vaishnav 👋</h1>
+    <p class="lead">Python Developer | Django Developer | SQL | Machine Learning Enthusiast</p>
+</div>
+
+<div class="row align-items-center mb-5 py-4" id="about">
+    <div class="col-md-4 text-center mb-4 mb-md-0">
+        {% if about.profile_image %}
+            <img src="{{ about.profile_image.url }}" class="img-fluid rounded-circle shadow" style="max-width: 250px;" alt="Profile photo">
+        {% endif %}
+    </div>
+    <div class="col-md-8">
+        <h2 class="mb-3">About Me</h2>
+        <p>{{ about.bio }}</p>
+
+        {% if about.location %}
+            <p class="text-muted mb-1">📍 {{ about.location }}</p>
+        {% endif %}
+        {% if about.email %}
+            <p class="text-muted mb-3">✉️ {{ about.email }}</p>
+        {% endif %}
+
+        <div class="d-flex gap-2 flex-wrap">
+            {% if about.resume_file %}
+                <a href="{{ about.resume_file.url }}" class="btn btn-dark" download>📄 Download Resume</a>
+            {% endif %}
+            {% if about.github_url %}
+                <a href="{{ about.github_url }}" target="_blank" class="btn btn-outline-dark">GitHub</a>
+            {% endif %}
+            {% if about.linkedin_url %}
+                <a href="{{ about.linkedin_url }}" target="_blank" class="btn btn-outline-primary">LinkedIn</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<h2 class="mt-5 mb-4 text-center" id="skills">Skills</h2>
+
+<div class="skills-grid">
+    {% regroup skills by get_category_display as skill_groups %}
+    {% for group in skill_groups %}
+    <div class="skill-category-panel p-4">
+        <h5 class="mb-3 fw-bold">{{ group.grouper }}</h5>
+        <div class="d-flex flex-wrap gap-3">
+            {% for skill in group.list %}
+            <div class="skill-card-wrapper">
+                <div class="card h-100 border-0 text-center p-3 skill-card">
+                    <i class="{{ skill.icon_class }} display-4 mb-2"></i>
+                    <h6 class="mb-2">{{ skill.name }}</h6>
+                    <div class="progress" style="height: 6px;">
+                        <div class="progress-bar bg-dark" role="progressbar"
+                             style="width: {{ skill.proficiency_percent }}%">
+                        </div>
+                    </div>
+                    <small class="text-muted mt-1">{{ skill.get_proficiency_display }}</small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<h2 class="mb-4" id="projects">My Projects</h2>
+<div class="row">
+    {% for project in projects %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            {% if project.image %}
+                <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ project.title }}</h5>
+                <p class="card-text">{{ project.description }}</p>
+                <p class="text-muted small">{{ project.tech_stack }}</p>
+            </div>
+            <div class="card-footer bg-white border-0">
+                {% if project.github_link %}
+                    <a href="{{ project.github_link }}" target="_blank" class="btn btn-outline-dark btn-sm">GitHub</a>
+                {% endif %}
+                {% if project.live_demo_link %}
+                    <a href="{{ project.live_demo_link }}" target="_blank" class="btn btn-primary btn-sm">Live Demo</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <p>No projects added yet. Add some via the admin panel!</p>
+    {% endfor %}
+</div>
+
+
+
+
+<h2 class="mb-4 mt-5 text-center" id="contact">Contact Me</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+{% endif %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">{{ form.name }}</div>
+            <div class="mb-3">{{ form.email }}</div>
+            <div class="mb-3">{{ form.message }}</div>
+            <button type="submit" class="btn btn-dark w-100">Send Message</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}
