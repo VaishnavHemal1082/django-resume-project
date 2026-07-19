@@ -11,7 +11,7 @@ class ProjectAdmin(admin.ModelAdmin):
 
 @admin.register(Skill)
 class SkillAdmin(admin.ModelAdmin):
-    ist_display = ('name', 'category', 'proficiency')
+    list_display = ('name', 'category', 'proficiency')
     list_filter = ('category', 'proficiency')
 
 

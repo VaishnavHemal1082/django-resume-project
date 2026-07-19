@@ -18,9 +18,10 @@ def home(request):
         form = ContactForm()
 
     context = {
-        'projects': projects,
-        'skills': skills,
-        'about': about,
-        'form': form,
+    'projects': projects,
+    'skills': skills,
+    'about': about,
+    'form': form,
+    'version': 'DEPLOY TEST 123',
     }
     return render(request, "portfolio_app/home.html", context)
